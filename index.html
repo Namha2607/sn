@@ -119,15 +119,40 @@ canvas{position:fixed;inset:0;pointer-events:none;}
 
 <!-- PAGE 5 -->
 <div class="page" id="p5">
-  <h1>💌 A Letter For You</h1>
-  <p>Hey you,</p>
-  <p>Loving you has been one of the most beautiful surprises of my life.</p>
-  <p>Somewhere between laughter, chaos, fights, and comfort — you became my home.</p>
-  <p>I don’t always say it perfectly, but I choose you. Every single day.</p>
-  <p><strong>Happy Valentine’s Day ❤️</strong></p>
+  <h2>Who is my favourite person in the whole wide world? 💖</h2>
+  <div id="wordle" style="display:flex;justify-content:center;gap:10px;margin:30px 0;">
+    <input maxlength="1" class="box" />
+    <input maxlength="1" class="box" />
+    <input maxlength="1" class="box" />
+    <input maxlength="1" class="box" />
+    <input maxlength="1" class="box" />
+    <input maxlength="1" class="box" />
+  </div>
+  <button onclick="checkWordle()">Submit</button>
 </div>
 
+<style>
+.box{
+  width:50px;height:60px;
+  font-size:28px;
+  text-align:center;
+  border-radius:12px;
+  border:2px solid #ff4d6d;
+  text-transform:uppercase;
+}
+</style>
+
 <script>
+const answer="SANYAM";
+function checkWordle(){
+  const boxes=document.querySelectorAll('.box');
+  let word="";
+  boxes.forEach(b=>word+=b.value.toUpperCase());
+  if(word===answer){fireworks();go(6)}
+  else alert('Nope 😌 try again');
+}
+
+
 /* navigation + music */
 let musicStarted=false;
 function startAndGo(n){
