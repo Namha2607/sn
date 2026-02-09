@@ -7,13 +7,13 @@
 <style>
 body{
   margin:0;
-  font-family:'Poppins',sans-serif;
-  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
   text-align:center;
+  overflow-x:hidden;
 }
-.page{display:none;min-height:100vh;padding:40px 20px;}
+.page{display:none;min-height:100vh;padding:30px 16px;box-sizing:border-box;}
 .page.active{display:block;}
-
 h1,h2,p{color:#b3003c;}
 button{
   padding:14px 28px;
@@ -22,22 +22,23 @@ button{
   border-radius:30px;
   font-size:18px;
   background:#ff4d6d;
-  color:white;
+  color:#fff;
   cursor:pointer;
 }
-button:hover{opacity:.9}
+button:active{transform:scale(0.96)}
 
-/* hearts background */
+/* simple floating hearts background */
 .heart{
   position:fixed;
   bottom:-20px;
-  font-size:20px;
-  animation:float 8s linear infinite;
+  font-size:18px;
+  opacity:0.5;
+  animation:floatUp 10s linear infinite;
   pointer-events:none;
 }
-@keyframes float{
-  from{transform:translateY(0)}
-  to{transform:translateY(-110vh)}
+@keyframes floatUp{
+  from{transform:translateY(0);}
+  to{transform:translateY(-120vh);}
 }
 
 /* puzzle */
@@ -48,55 +49,54 @@ button:hover{opacity:.9}
   display:grid;
   grid-template-columns:repeat(3,1fr);
   grid-template-rows:repeat(3,1fr);
+  gap:2px;
 }
 .tile{
-  width:100px;
-  height:100px;
   background-size:300px 300px;
-  cursor:grab;
+  border-radius:6px;
 }
 
 /* quiz */
-.option{display:block;margin:10px auto;max-width:320px;}
+.option{display:block;max-width:320px;margin:10px auto;}
 .shake{animation:shake .4s}
 @keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}}
 
-/* letter */
-.letter{
-  max-width:600px;
-  margin:30px auto;
-  background:rgba(255,255,255,.85);
-  padding:30px;
-  border-radius:20px;
-  line-height:1.6;
-}
+/* progress */
+#barWrap{width:80%;margin:10px auto;background:#ffd1dc;border-radius:10px}
+#bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.3s}
+
+canvas{position:fixed;inset:0;pointer-events:none;}
 </style>
 </head>
-<body onclick="startMusic()">
+<body>
 
-<audio id="bgMusic" loop id="music" loop>
+<audio id="bgMusic" loop>
   <source src="thousand-years.mp3" type="audio/mpeg">
 </audio>
+<canvas id="fx"></canvas>
 
 <!-- PAGE 1 -->
 <div class="page active" id="p1">
   <h1>Will you be my Valentine? 💖</h1>
-  <button onclick="go(2)">Yes</button>
-  <button onclick="go(2)">Yessss</button>
-  <button onclick="go(2)">Fucking Yess</button>
+  <p>Choose wisely 😌</p>
+  <button onclick="startAndGo(2)">Yes</button>
+  <button onclick="startAndGo(2)">Yessss</button>
+  <button onclick="startAndGo(2)">Fucking Yess</button>
 </div>
 
 <!-- PAGE 2 -->
 <div class="page" id="p2">
-  <h2>Choose our moment 💞</h2>
-  <img src="img1.jpg" width="200" onclick="startPuzzle('img1.jpg')">
-  <img src="img2.jpg" width="200" onclick="startPuzzle('img2.jpg')">
-  <img src="img3.jpg" width="200" onclick="startPuzzle('img3.jpg')">
+  <h2>Choose our memory 💞</h2>
+  <p>Tap one image</p>
+  <img src="img1.jpg" width="180" onclick="startPuzzle('img1.jpg')">
+  <img src="img2.jpg" width="180" onclick="startPuzzle('img2.jpg')">
+  <img src="img3.jpg" width="180" onclick="startPuzzle('img3.jpg')">
 </div>
 
 <!-- PAGE 3 -->
 <div class="page" id="p3">
   <h2>Complete the puzzle 🧩</h2>
+  <p><strong>S</strong> will disappear… reveal <strong>N</strong> 😉</p>
   <div id="puzzleBoard"></div>
   <button onclick="verifyPuzzle()">Next</button>
 </div>
@@ -104,27 +104,34 @@ button:hover{opacity:.9}
 <!-- PAGE 4 -->
 <div class="page" id="p4">
   <h2>How well do you know me? 💭</h2>
+  <div id="barWrap"><div id="bar"></div></div>
   <p id="score">0 / 5</p>
   <div id="quiz"></div>
 </div>
 
 <!-- PAGE 5 -->
 <div class="page" id="p5">
-  <h1>💌 Just One Last Thing…</h1>
-  <div class="letter">
-    <p>Hey you,</p>
-    <p>Loving you has been one of the most beautiful things that has happened to me.</p>
-    <p>Somewhere between chaos and comfort, you became my safe place.</p>
-    <p>I may not always show it, but my heart chooses you — always.</p>
-    <p><strong>Happy Valentine’s Day ❤️</strong></p>
-  </div>
+  <h1>💌 A Letter For You</h1>
+  <p>Hey you…</p>
+  <p>Loving you has been one of the most beautiful surprises of my life.</p>
+  <p>Through chaos, laughter, fights and comfort — you became my home.</p>
+  <p>I don’t say it enough, but I choose you. Every single day.</p>
+  <p><strong>Happy Valentine’s Day ❤️</strong></p>
 </div>
 
 <script>
+/* navigation + music */
+let musicStarted=false;
+function startAndGo(n){
+  if(!musicStarted){
+    document.getElementById('bgMusic').play().catch(()=>{});
+    musicStarted=true;
+  }
+  go(n);
+}
 function go(n){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('p'+n).classList.add('active');
-  document.getElementById('music').play();
 }
 
 /* hearts */
@@ -133,7 +140,7 @@ for(let i=0;i<25;i++){
   h.className='heart';
   h.innerHTML='❤️';
   h.style.left=Math.random()*100+'vw';
-  h.style.animationDuration=5+Math.random()*5+'s';
+  h.style.animationDuration=6+Math.random()*6+'s';
   document.body.appendChild(h);
 }
 
@@ -143,8 +150,8 @@ function startPuzzle(img){
   go(3);
   const b=document.getElementById('puzzleBoard');
   b.innerHTML='';
-  let a=[0,1,2,3,4,5,6,7,8].sort(()=>Math.random()-0.5);
-  a.forEach(p=>{
+  let order=[0,1,2,3,4,5,6,7,8].sort(()=>Math.random()-0.5);
+  order.forEach((p)=>{
     let t=document.createElement('div');
     t.className='tile';
     t.dataset.correct=p;
@@ -167,8 +174,10 @@ function startPuzzle(img){
 }
 function verifyPuzzle(){
   let ok=true;
-  document.querySelectorAll('.tile').forEach((t,i)=>{if(+t.dataset.correct!==i)ok=false});
-  if(ok){go(4);loadQuiz()}else alert('Almost there 😏');
+  document.querySelectorAll('.tile').forEach((t,i)=>{
+    if(+t.dataset.correct!==i) ok=false;
+  });
+  ok ? (fireworks(), go(4), loadQuiz()) : alert('Almost 😏');
 }
 
 /* quiz */
@@ -194,19 +203,23 @@ function loadQuiz(){
 }
 function checkAnswer(btn,i){
   if(i===quizData[qi].a){
-    score++;qi++;
+    score++; fireworks(); qi++;
     document.getElementById('score').innerText=`${score} / 5`;
-    qi<quizData.length?loadQuiz():go(5);
+    document.getElementById('bar').style.width=(score/5*100)+'%';
+    qi<quizData.length ? loadQuiz() : go(5);
   }else{
     btn.classList.add('shake');
     setTimeout(()=>btn.classList.remove('shake'),400);
+    brokenHearts();
   }
 }
+
+/* effects */
+const c=document.getElementById('fx'),ctx=c.getContext('2d');
+c.width=innerWidth;c.height=innerHeight;let parts=[];
+function fireworks(){for(let i=0;i<80;i++)parts.push({x:Math.random()*c.width,y:Math.random()*c.height/2,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,l:60})}
+function brokenHearts(){for(let i=0;i<40;i++)parts.push({x:Math.random()*c.width,y:Math.random()*c.height/2,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,l:40,broken:true})}
+(function anim(){ctx.clearRect(0,0,c.width,c.height);parts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;p.l--;ctx.fillStyle=p.broken?'#555':'hsl('+Math.random()*360+',100%,60%)';ctx.fillRect(p.x,p.y,3,3);if(p.l<=0)parts.splice(i,1)});requestAnimationFrame(anim)})();
 </script>
 </body>
-<script>
-function startMusic(){
-  const music=document.getElementById('bgMusic');
-  if(music && music.paused){music.play().catch(()=>{});} }
-</script>
 </html>
