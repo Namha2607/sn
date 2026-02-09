@@ -36,12 +36,7 @@ button:hover{transform:scale(1.08)}
 .heart{position:absolute;color:rgba(255,0,90,0.4);font-size:20px;animation:float 8s linear infinite;pointer-events:none;z-index:1;}
 @keyframes float{0%{transform:translateY(100vh);}100%{transform:translateY(-10vh);}}
 
-/* juggling YES buttons */
-.juggle{position:absolute;animation:juggle 2.5s ease-in-out infinite;}
-.juggle:nth-child(1){left:20%;animation-delay:0s}
-.juggle:nth-child(2){left:45%;animation-delay:.4s}
-.juggle:nth-child(3){left:70%;animation-delay:.8s}
-@keyframes juggle{0%{top:70%;}50%{top:40%;}100%{top:70%;}}
+/* YES buttons are now static for better click reliability */50%{top:40%;}100%{top:70%;}}
 
 /* image choice */
 .choice img{width:200px;margin:15px;border-radius:15px;cursor:pointer;opacity:0;animation:fadeInUp 1.2s ease forwards;}
@@ -200,4 +195,5 @@ function brokenHearts(){
 
 </body>
 </html>
+
 
