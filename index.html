@@ -68,12 +68,7 @@ button:active{transform:scale(0.96)}
 canvas{position:fixed;inset:0;pointer-events:none;}
 
 /* wordle */
-.wordle{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin:25px 0;
-}
+
 .wordle input{
   width:55px;
   height:65px;
@@ -100,7 +95,7 @@ canvas{position:fixed;inset:0;pointer-events:none;}
 <!-- PAGE 1 -->
 <div class="page active" id="p1">
   <h1>Will you be my Valentine? 💖</h1>
-  <p>Choose wisely 😌</p>
+  <p>Choose one 😌</p>
   <button onclick="startAndGo(2)">Yes</button>
   <button onclick="startAndGo(2)">Yessss</button>
   <button onclick="startAndGo(2)">Fucking Yess</button>
@@ -131,23 +126,7 @@ canvas{position:fixed;inset:0;pointer-events:none;}
   <div id="quiz"></div>
 </div>
 
-<!-- PAGE 5 : WORDLE -->
-<div class="page" id="p5">
-  <h2>One last question… 💭</h2>
-  <p>Who is my favourite person?</p>
-  <div id="wordle" class="wordle">
-    <input maxlength="1" placeholder="?">
-    <input maxlength="1" placeholder="?">
-    <input maxlength="1" placeholder="?">
-    <input maxlength="1" placeholder="?">
-    <input maxlength="1" placeholder="?">
-    <input maxlength="1" placeholder="?">
-  </div>
-  <br>
-  <button onclick="checkWordle()">Submit</button>
-</div>
-
-<!-- PAGE 6 -->
+<!-- PAGE 5 -->
 <div class="page" id="p6">
   <h1>💌 A Letter For You</h1>
   <p>Hey you…</p>
@@ -252,15 +231,7 @@ function checkAnswer(btn,i){
   }
 }
 
-function checkWordle(){
-  const inputs=document.querySelectorAll('#wordle input');
-  let word='';
-  inputs.forEach(i=>word+=i.value.toLowerCase());
-  if(word==='sanyam'){
-    inputs.forEach(i=>i.classList.add('correct'));
-    fireworks();
-    setTimeout(()=>go(6),800);
-  }else{
+else{
     inputs.forEach(i=>i.classList.add('wrong'));
     brokenHearts();
     setTimeout(()=>inputs.forEach(i=>i.classList.remove('wrong')),600);
