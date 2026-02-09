@@ -72,6 +72,9 @@ button:active{transform:scale(0.96)}
 #bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.3s}
 
 canvas{position:fixed;inset:0;pointer-events:none;}
+.wordle-boxes{display:flex;gap:10px;justify-content:center;margin:20px}
+.wordle-boxes input{width:50px;height:60px;font-size:28px;text-align:center;border-radius:8px;border:2px solid pink}
+.big-letter{font-size:22px;line-height:1.9;max-width:650px;margin:auto}
 </style>
 </head>
 <body>
@@ -225,6 +228,27 @@ c.width=innerWidth;c.height=innerHeight;let parts=[];
 function fireworks(){for(let i=0;i<80;i++)parts.push({x:Math.random()*c.width,y:Math.random()*c.height/2,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,l:60})}
 function brokenHearts(){for(let i=0;i<40;i++)parts.push({x:Math.random()*c.width,y:Math.random()*c.height/2,vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,l:40})}
 (function anim(){ctx.clearRect(0,0,c.width,c.height);parts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;p.l--;ctx.fillStyle='hsl('+Math.random()*360+',100%,60%)';ctx.fillRect(p.x,p.y,3,3);if(p.l<=0)parts.splice(i,1)});requestAnimationFrame(anim)})();
+function checkWordle(){
+  const inputs = document.querySelectorAll('.wordle-boxes input');
+  let word='';
+  inputs.forEach(i=>word+=i.value.toUpperCase());
+  if(word==='SANYAM'){goToPage('letter')}else{alert('Try again 😌')}
+}
+
 </script>
+<!-- WORDLE PAGE -->
+<div class="page" id="wordle">
+  <h1>Who is my favourite person in the whole wide world? 💖</h1>
+  <div class="wordle-boxes">
+    <input maxlength="1" />
+    <input maxlength="1" />
+    <input maxlength="1" />
+    <input maxlength="1" />
+    <input maxlength="1" />
+    <input maxlength="1" />
+  </div>
+  <button onclick="checkWordle()">Submit</button>
+</div>
+
 </body>
 </html>
