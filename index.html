@@ -119,15 +119,17 @@ canvas{position:fixed;inset:0;pointer-events:none;}
 
 <!-- PAGE 5 -->
 <div class="page" id="p5">
-  <h2>Who is my favourite person in the whole wide world? 💖</h2>
-  <div id="wordle" style="display:flex;justify-content:center;gap:10px;margin:30px 0;">
-    <input maxlength="1" class="box" />
-    <input maxlength="1" class="box" />
-    <input maxlength="1" class="box" />
-    <input maxlength="1" class="box" />
-    <input maxlength="1" class="box" />
-    <input maxlength="1" class="box" />
+  <h2>Who is my favourite person in the whole wide world? ❤️</h2>
+  <div id="wordle" style="display:flex;justify-content:center;gap:12px;margin-top:30px;">
+    <input maxlength="1" class="wbox">
+    <input maxlength="1" class="wbox">
+    <input maxlength="1" class="wbox">
+    <input maxlength="1" class="wbox">
+    <input maxlength="1" class="wbox">
+    <input maxlength="1" class="wbox">
   </div>
+  <button style="margin-top:30px" onclick="checkWordle()">Submit</button>
+</div>
   <button onclick="checkWordle()">Submit</button>
 </div>
 
@@ -236,15 +238,30 @@ function loadQuiz(){
 }
 function checkAnswer(btn,i){
   if(i===quizData[qi].a){
-    score++; fireworks(); qi++;
+    score++;
+    fireworks();
+    qi++;
     document.getElementById('score').innerText=`${score} / 5`;
     document.getElementById('bar').style.width=(score/5*100)+'%';
-    qi<quizData.length ? loadQuiz() : go(5);
+    if(qi<quizData.length){loadQuiz()}else{go(5)}
   }else{
     btn.classList.add('shake');
     setTimeout(()=>btn.classList.remove('shake'),400);
-    brokenHearts();
+    alert('Wrong 😏 Try again');
   }
+}
+
+function checkWordle(){
+  const boxes=[...document.querySelectorAll('.wbox')];
+  const guess=boxes.map(b=>b.value.toUpperCase()).join('');
+  if(guess==='SANYAM'){
+    fireworks();
+    go(6);
+  }else{
+    alert('Nope 😏 Try again');
+    boxes.forEach(b=>b.value='');
+  }
+}
 }
 
 /* effects */
