@@ -38,12 +38,8 @@ button:hover{transform:scale(1.08)}
 @keyframes float{0%{transform:translateY(100vh);}100%{transform:translateY(-10vh);}}
 
 /* slow floating YES buttons (clickable) */
-.juggle{
-  position:relative;
-  animation:slowFloat 6s ease-in-out infinite;
-}
-@keyframes slowFloat{
-  0%{transform:translateY(0)}
+.juggle{position:absolute;z-index:10;animation:juggle 8s ease-in-out infinite;}
+@keyframes juggle{0%{top:65%;}50%{top:55%;}100%{top:65%;}}
   50%{transform:translateY(-15px)}
   100%{transform:translateY(0)}
 }50%{top:40%;}100%{top:70%;}}
@@ -69,7 +65,7 @@ button:hover{transform:scale(1.08)}
 #bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.4s}
 #barWrap{width:80%;margin:10px auto;background:#ffd1dc;border-radius:10px}
 
-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:-1;}
 </style>
 </head>
 <body>
