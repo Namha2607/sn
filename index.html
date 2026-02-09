@@ -13,7 +13,7 @@ body{
   overflow:hidden;
   text-align:center;
 }
-.page{display:none;height:100vh;padding:40px 20px;position:relative;}
+.page{display:none;height:100vh;padding:40px 20px;position:relative;z-index:2;}
 .page.active{display:block;}
 
 h1,h2,p{color:#b3003c;}
@@ -64,7 +64,7 @@ button:hover{transform:scale(1.08)}
 #bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.4s}
 #barWrap{width:80%;margin:10px auto;background:#ffd1dc;border-radius:10px}
 
-canvas{position:fixed;inset:0;pointer-events:none;z-index:1;}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
 </style>
 </head>
 <body>
@@ -200,3 +200,4 @@ function brokenHearts(){
 
 </body>
 </html>
+
