@@ -72,9 +72,9 @@ button:hover{opacity:.9}
 }
 </style>
 </head>
-<body>
+<body onclick="startMusic()">
 
-<audio id="music" loop>
+<audio id="bgMusic" loop id="music" loop>
   <source src="thousand-years.mp3" type="audio/mpeg">
 </audio>
 
@@ -204,4 +204,9 @@ function checkAnswer(btn,i){
 }
 </script>
 </body>
+<script>
+function startMusic(){
+  const music=document.getElementById('bgMusic');
+  if(music && music.paused){music.play().catch(()=>{});} }
+</script>
 </html>
