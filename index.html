@@ -66,6 +66,28 @@ button:active{transform:scale(0.96)}
 #bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.3s}
 
 canvas{position:fixed;inset:0;pointer-events:none;}
+
+/* wordle */
+.wordle{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:25px 0;
+}
+.wordle input{
+  width:55px;
+  height:65px;
+  text-align:center;
+  font-size:26px;
+  font-weight:600;
+  border-radius:12px;
+  border:2px solid #ff4d6d;
+  outline:none;
+  animation:popIn .6s ease forwards;
+}
+@keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.wordle input.correct{background:#b7f5c4;border-color:#28a745}
+.wordle input.wrong{background:#ffd6d6;border-color:#dc3545}
 </style>
 </head>
 <body>
@@ -111,10 +133,10 @@ canvas{position:fixed;inset:0;pointer-events:none;}
 
 <!-- PAGE 5 : WORDLE -->
 <div class="page" id="p5">
-  <h2>One last thing… 💭</h2>
+  <h2>One last question… 💭</h2>
   <p>Who is my favourite person?</p>
-  <div id="wordle">
-    <input maxlength="1" value="N" disabled>
+  <div id="wordle" class="wordle">
+    <input maxlength="1" placeholder="?">
     <input maxlength="1" placeholder="?">
     <input maxlength="1" placeholder="?">
     <input maxlength="1" placeholder="?">
@@ -233,17 +255,23 @@ function checkAnswer(btn,i){
 function checkWordle(){
   const inputs=document.querySelectorAll('#wordle input');
   let word='';
-  inputs.forEach(i=>word+=i.value.toUpperCase());
-  if(word==='NSANYAM'.slice(1)){
+  inputs.forEach(i=>word+=i.value.toLowerCase());
+  if(word==='sanyam'){
+    inputs.forEach(i=>i.classList.add('correct'));
     fireworks();
-    go(6);
+    setTimeout(()=>go(6),800);
   }else{
+    inputs.forEach(i=>i.classList.add('wrong'));
+    brokenHearts();
+    setTimeout(()=>inputs.forEach(i=>i.classList.remove('wrong')),600);
+  }
+}else{
     brokenHearts();
     alert('Almost 😏 Try again');
   }
 }
 
-/* effe(btn,i){
+/* effects */(btn,i){
   if(i===quizData[qi].a){
     score++; fireworks(); qi++;
     document.getElementById('score').innerText=`${score} / 5`;
