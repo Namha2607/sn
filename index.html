@@ -2,96 +2,211 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Be My Valentine ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{
   margin:0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
   text-align:center;
 }
-.page{display:none;min-height:100vh;padding:30px 20px;box-sizing:border-box;}
+.page{display:none;min-height:100vh;padding:40px 20px;}
 .page.active{display:block;}
+
 h1,h2,p{color:#b3003c;}
 button{
-  padding:14px 26px;
+  padding:14px 28px;
   margin:12px;
   border:none;
   border-radius:30px;
   font-size:18px;
   background:#ff4d6d;
-  color:#fff;
+  color:white;
+  cursor:pointer;
 }
-.option{display:block;width:100%;max-width:320px;margin:10px auto;}
-#barWrap{width:80%;margin:15px auto;background:#ffd1dc;border-radius:10px}
-#bar{height:10px;width:0;background:#ff4d6d;border-radius:10px;transition:.4s}
-.letter{max-width:600px;margin:20px auto;background:#fff;padding:25px;border-radius:20px;font-size:17px;line-height:1.6}
-.heartPop{position:fixed;font-size:24px;animation:pop 1s ease forwards;pointer-events:none}
-.broken{color:#444}
-@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1.5);opacity:0}}
+button:hover{opacity:.9}
+
+/* hearts background */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:20px;
+  animation:float 8s linear infinite;
+  pointer-events:none;
+}
+@keyframes float{
+  from{transform:translateY(0)}
+  to{transform:translateY(-110vh)}
+}
+
+/* puzzle */
+#puzzleBoard{
+  width:300px;
+  height:300px;
+  margin:20px auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  grid-template-rows:repeat(3,1fr);
+}
+.tile{
+  width:100px;
+  height:100px;
+  background-size:300px 300px;
+  cursor:grab;
+}
+
+/* quiz */
+.option{display:block;margin:10px auto;max-width:320px;}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}}
+
+/* letter */
+.letter{
+  max-width:600px;
+  margin:30px auto;
+  background:rgba(255,255,255,.85);
+  padding:30px;
+  border-radius:20px;
+  line-height:1.6;
+}
 </style>
 </head>
-<body>
+<body onclick="startMusic()">
 
-<audio id="music" loop>
+<audio id="bgMusic" loop id="music" loop>
   <source src="thousand-years.mp3" type="audio/mpeg">
 </audio>
 
-<!-- PAGE 0 -->
-<div class="page active" id="p0">
-  <h1>Tap to Start ❤️</h1>
-  <p>(Music will play)</p>
-  <button onclick="startExperience()">Start</button>
-</div>
-
 <!-- PAGE 1 -->
-<div class="page" id="p1">
+<div class="page active" id="p1">
   <h1>Will you be my Valentine? 💖</h1>
-  <button onclick="go(2)">YES</button>
-  <button onclick="go(2)">YESSSS</button>
-  <button onclick="go(2)">FUCKING YES</button>
+  <button onclick="go(2)">Yes</button>
+  <button onclick="go(2)">Yessss</button>
+  <button onclick="go(2)">Fucking Yess</button>
 </div>
 
 <!-- PAGE 2 -->
 <div class="page" id="p2">
-  <h2>How well do you know me? 💭</h2>
-  <div id="barWrap"><div id="bar"></div></div>
-  <p id="score">0 / 5</p>
-  <div id="quiz"></div>
+  <h2>Choose our moment 💞</h2>
+  <img src="img1.jpg" width="200" onclick="startPuzzle('img1.jpg')">
+  <img src="img2.jpg" width="200" onclick="startPuzzle('img2.jpg')">
+  <img src="img3.jpg" width="200" onclick="startPuzzle('img3.jpg')">
 </div>
 
 <!-- PAGE 3 -->
 <div class="page" id="p3">
+  <h2>Complete the puzzle 🧩</h2>
+  <div id="puzzleBoard"></div>
+  <button onclick="verifyPuzzle()">Next</button>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="p4">
+  <h2>How well do you know me? 💭</h2>
+  <p id="score">0 / 5</p>
+  <div id="quiz"></div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="p5">
   <h1>💌 Just One Last Thing…</h1>
   <div class="letter">
     <p>Hey you,</p>
-    <p>Loving you has been one of the most beautiful things that has happened to me. Somewhere between laughter, chaos, and comfort—you became my safe place.</p>
-    <p>I wasn’t sure I could open my heart again, and then you happened.</p>
-    <p>I know I don’t always show it well, but I love you deeply and genuinely.</p>
-    <p>Thank you for choosing me, every single day.</p>
+    <p>Loving you has been one of the most beautiful things that has happened to me.</p>
+    <p>Somewhere between chaos and comfort, you became my safe place.</p>
+    <p>I may not always show it, but my heart chooses you — always.</p>
     <p><strong>Happy Valentine’s Day ❤️</strong></p>
   </div>
 </div>
 
 <script>
-function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
-function startExperience(){document.getElementById('music').play();show('p1');}
-function go(n){show('p'+n)}
+function go(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  document.getElementById('music').play();
+}
 
+/* hearts */
+for(let i=0;i<25;i++){
+  let h=document.createElement('div');
+  h.className='heart';
+  h.innerHTML='❤️';
+  h.style.left=Math.random()*100+'vw';
+  h.style.animationDuration=5+Math.random()*5+'s';
+  document.body.appendChild(h);
+}
+
+/* puzzle */
+let dragged=null;
+function startPuzzle(img){
+  go(3);
+  const b=document.getElementById('puzzleBoard');
+  b.innerHTML='';
+  let a=[0,1,2,3,4,5,6,7,8].sort(()=>Math.random()-0.5);
+  a.forEach(p=>{
+    let t=document.createElement('div');
+    t.className='tile';
+    t.dataset.correct=p;
+    t.style.backgroundImage=`url(${img})`;
+    t.style.backgroundPosition=`${-(p%3)*100}px ${-Math.floor(p/3)*100}px`;
+    t.draggable=true;
+    t.ondragstart=()=>dragged=t;
+    t.ondragover=e=>e.preventDefault();
+    t.ondrop=e=>{
+      e.preventDefault();
+      let bp=dragged.style.backgroundPosition;
+      let dc=dragged.dataset.correct;
+      dragged.style.backgroundPosition=t.style.backgroundPosition;
+      dragged.dataset.correct=t.dataset.correct;
+      t.style.backgroundPosition=bp;
+      t.dataset.correct=dc;
+    };
+    b.appendChild(t);
+  });
+}
+function verifyPuzzle(){
+  let ok=true;
+  document.querySelectorAll('.tile').forEach((t,i)=>{if(+t.dataset.correct!==i)ok=false});
+  if(ok){go(4);loadQuiz()}else alert('Almost there 😏');
+}
+
+/* quiz */
 const quizData=[
- {q:"What is my favourite colour?",o:["Black","Pink","Blue","Purple"],a:2},
- {q:"What do I prefer more?",o:["Coffee","Tea","Red Bull","I don’t need caffeine, I need you 😌"],a:3},
- {q:"What annoys me the most?",o:["Being late","Not replying","Messy rooms","All of the above"],a:2},
- {q:"My ideal date looks like?",o:["Candle light dinner","Long drive + music","Netflix + food + cuddles","All with you ❤️"],a:3},
- {q:"One thing I secretly love but won’t admit easily?",o:["Compliments","Being pampered","Random surprises","All of this (don’t expose me) 😤"],a:3}
+ {q:'What is my favourite colour?',o:['Black','Pink','Blue','Purple'],a:2},
+ {q:'What do I prefer more?',o:['Coffee','Tea','Red Bull','I don’t need caffeine, I need you 😌'],a:3},
+ {q:'What annoys me the most?',o:['Being late','Not replying','Messy rooms','All of the above'],a:2},
+ {q:'My ideal date looks like?',o:['Candle light dinner','Long drive + music','Netflix + food + cuddles','All with you ❤️'],a:3},
+ {q:'One thing I secretly love?',o:['Compliments','Being pampered','Random surprises','All of this 😤'],a:3}
 ];
 let qi=0,score=0;
-const quiz=document.getElementById('quiz');
-function loadQuiz(){const q=quizData[qi];quiz.innerHTML=`<h3>${q.q}</h3>`;q.o.forEach((o,i)=>{let b=document.createElement('button');b.className='option';b.innerText=o;b.onclick=()=>answer(i);quiz.appendChild(b)})}
-function pop(correct){for(let i=0;i<20;i++){let s=document.createElement('div');s.className='heartPop'+(correct?'':' broken');s.innerHTML=correct?'❤️':'💔';s.style.left=Math.random()*100+'vw';s.style.top=Math.random()*100+'vh';document.body.appendChild(s);setTimeout(()=>s.remove(),900)}}
-function answer(i){if(i===quizData[qi].a){score++;pop(true);qi++;document.getElementById('score').innerText=`${score} / 5`;document.getElementById('bar').style.width=(score/5*100)+'%';qi<quizData.length?loadQuiz():show('p3')}else{pop(false)}}
-loadQuiz();
+function loadQuiz(){
+  const q=quizData[qi];
+  const box=document.getElementById('quiz');
+  box.innerHTML=`<h3>${q.q}</h3>`;
+  q.o.forEach((o,i)=>{
+    let b=document.createElement('button');
+    b.className='option';
+    b.innerText=o;
+    b.onclick=()=>checkAnswer(b,i);
+    box.appendChild(b);
+  });
+}
+function checkAnswer(btn,i){
+  if(i===quizData[qi].a){
+    score++;qi++;
+    document.getElementById('score').innerText=`${score} / 5`;
+    qi<quizData.length?loadQuiz():go(5);
+  }else{
+    btn.classList.add('shake');
+    setTimeout(()=>btn.classList.remove('shake'),400);
+  }
+}
 </script>
 </body>
+<script>
+function startMusic(){
+  const music=document.getElementById('bgMusic');
+  if(music && music.paused){music.play().catch(()=>{});} }
+</script>
 </html>
